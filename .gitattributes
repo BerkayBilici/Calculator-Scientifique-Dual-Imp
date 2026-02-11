@@ -1,0 +1,3 @@
+# Count parser/lexer sources as C so the repo language shows "C" instead of "Yacc"
+*.y linguist-language=C
+*.flx linguist-language=C
