@@ -1,0 +1,2 @@
+(xy)*g(b)+f(2x+y)g(5b)=10bfgx+5bfgy+bgxy
+(xy)*g(b)+f(2x)-yg(5bx)=-4bgxy+2fx

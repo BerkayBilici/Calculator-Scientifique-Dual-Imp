@@ -1,0 +1,1 @@
+(find-redefined-functions '(( (f (x) (= (+ x 2))) (g (x) (= (+ x 5))) (f (y) (= (* y y))) (f (x) (= (+ x 2))) (g (x) (= (* x 3))) ) ( )))

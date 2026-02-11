@@ -1,0 +1,1 @@
+(find-undefined-parameters  '(( (f (x y) (= (+ x (* y z)))) ) ( )))

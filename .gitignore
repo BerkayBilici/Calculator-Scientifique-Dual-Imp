@@ -1,0 +1,6 @@
+calculator.exe
+calculator
+*.o
+lex.yy.c
+*.tab.c
+*.tab.h

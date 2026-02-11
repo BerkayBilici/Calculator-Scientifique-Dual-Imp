@@ -1,0 +1,1 @@
+f(y,x)+f(x)+f(y)=fx+fy+2x^2y+3xy^2+4x+5

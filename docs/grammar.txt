@@ -1,0 +1,81 @@
+<program> ::= <definition_block> <calculation_block>
+
+<definition_block> ::= <def_stmt_list>
+
+<def_stmt_list> ::= ε
+                 | <def_stmt> <def_stmt_list>
+
+<def_stmt> ::= <fn_def>
+             | ";"
+
+<calculation_block> ::= <calc_stmt_list>
+
+<calc_stmt_list> ::= ε
+                  | <calc_stmt> <calc_stmt_list>
+
+<calc_stmt> ::= <calc>
+              | ";"
+
+<fn_def> ::= <identifier> "(" <var_parameters> ")" "=" <oe> ";"
+          | <identifier> "(" ")" "=" <oe> ";"
+
+<var_parameters> ::= <identifier>
+                  | <var_parameters> "," <identifier>
+
+
+/* ---------- Definition expressions (oe) ---------- */
+
+<oe>  ::= <oe> "+" <oe1>
+       | <oe> "-" <oe1>
+       | <oe1>
+
+<oe1> ::= <oe1> "*" <oe2>
+       | <oe1> <oe2>          /* implicit multiplication */
+       | <oe2>
+
+<oe2> ::= <integer>
+       | <identifier>
+       | "(" <oe> ")"
+       | <identifier> "^" <integer>
+       | <integer> "^" <integer>
+
+
+/* ---------- Calculation statements ---------- */
+
+<calc> ::= "calculate" <ee> ";"
+
+/* ---------- Evaluation expressions (ee) ---------- */
+
+<ee>  ::= <ee> "+" <ee1>
+       | <ee> "-" <ee1>
+       | <ee1>
+
+<ee1> ::= <ee1> "*" <ee2>
+       | <ee1> <ee2>          /* implicit multiplication */
+       | <ee2>
+
+<ee2> ::= <integer>
+       | <identifier>
+       | "(" ")"              /* empty expression -> 0 in your implementation */
+       | <identifier> "(" <ee3> ")"   /* function call (with args) */
+       | "(" <ee3> ")"               /* parentheses / or missing function name if >1 arg */
+       | <identifier> "(" ")"        /* function call (no args) */
+       | <identifier> "^" <integer>
+       | <integer> "^" <integer>
+       | <integration>
+       | <derivation>
+
+<ee3> ::= <ee>
+       | <ee3> "," <ee>
+
+
+/* ---------- Operators ---------- */
+
+<integration> ::= "I" "(" <identifier> "," <identifier> "," <integer> ")"
+<derivation>  ::= "D" "(" <identifier> "," <identifier> "," <integer> ")"
+
+
+/* ---------- Lexical tokens ---------- */
+
+<identifier> ::= [a-z]
+<integer>    ::= "0" | [1-9][0-9]*

@@ -1,0 +1,1 @@
+h(a,b)g(c)*f(d)=3a^2cd+6a^2d+3bcd+6bd

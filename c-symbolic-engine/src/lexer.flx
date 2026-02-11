@@ -1,0 +1,89 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "parser.tab.h"
+
+int comment_level = 0;
+char expression_buffer[1024];
+
+#define YY_USER_ACTION yylloc.first_line = yylloc.last_line = yylineno;
+
+void append_to_buffer(const char* text) {
+    size_t curr_len = strlen(expression_buffer);
+    size_t add_len  = strlen(text);
+    if (curr_len + add_len >= sizeof(expression_buffer) - 1) {
+        add_len = sizeof(expression_buffer) - 1 - curr_len;
+    }
+    memcpy(expression_buffer + curr_len, text, add_len);
+    expression_buffer[curr_len + add_len] = '\0';
+}
+%}
+
+%option yylineno
+%option noyywrap
+%x COMMENT
+
+tPLUS       "+"
+tMINUS      "-"
+tMUL        "*"
+tEXP        "^"
+tLPR        "("
+tRPR        ")"
+tASSIGN     "="
+tCOMMA      ","
+tSEMICOLON  ";"
+
+tDERIVATION     "D"
+tINTEGRATION    "I"
+
+tCALCULATE  "calculate"
+tIDENTIFIER [a-z]
+tINTEGER    0|[1-9][0-9]*
+
+%%
+
+{tPLUS}         { append_to_buffer(yytext); return tPLUS; }
+{tMINUS}        { append_to_buffer(yytext); return tMINUS; }
+{tMUL}          { append_to_buffer(yytext); return tMUL; }
+{tEXP}          { append_to_buffer(yytext); return tEXP; }
+{tLPR}          { append_to_buffer(yytext); return tLPR; }
+{tRPR}          { append_to_buffer(yytext); return tRPR; }
+{tASSIGN}       { return tASSIGN; }
+{tCOMMA}        { append_to_buffer(yytext); return tCOMMA; }
+{tSEMICOLON}    { return tSEMICOLON; }
+
+{tDERIVATION}   { append_to_buffer(yytext); return tDERIVATION; }
+{tINTEGRATION}  { append_to_buffer(yytext); return tINTEGRATION; }
+
+{tCALCULATE}    { expression_buffer[0] = '\0'; return tCALCULATE; }
+
+{tIDENTIFIER}   { append_to_buffer(yytext); yylval.str = yytext[0]; return tIDENTIFIER; }  
+{tINTEGER}      { append_to_buffer(yytext); yylval.value = atoi(yytext); return tINTEGER; }
+
+"//".*          {}
+
+"/*"            {
+                    comment_level++;
+                    BEGIN(COMMENT);
+                }
+
+<COMMENT>"/*"   { comment_level++; }
+
+<COMMENT>"//"[^\n]* {}
+
+<COMMENT>"*/"   {
+                    if (--comment_level == 0) {
+                        BEGIN(0);
+                    }
+                }
+
+<COMMENT>\n     {}
+
+<COMMENT>.      {}
+
+[\n\t\r ]       {}
+
+.               { return yytext[0]; }
+
+%%

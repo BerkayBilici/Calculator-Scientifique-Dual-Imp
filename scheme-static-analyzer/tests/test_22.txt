@@ -1,0 +1,1 @@
+(find-arity-contradictions '(( (f (x) (= x)) ) ( (calculate (+ (f) (f a b))) )))

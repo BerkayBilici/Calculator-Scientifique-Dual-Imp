@@ -1,0 +1,1 @@
+(find-undefined-parameters '( ( (f (x) (= (* x 3)) ) (g (t u) (= (+ t v)) ) (f (y) (= (* y y)) ) (k (a b) (= (+ (* a b) c)) ) ) ( (calculate (+ (f x) (h y)) ) (calculate (+ (f (o y)) (((x (b l)) y)) ((c b)) ) ) (calculate (+ (g a))) (calculate (+ ((g a)) ) ) ) ) )

@@ -1,0 +1,1 @@
+(find-arity-contradictions '(( (f (x) (= (* x 2))) (h (z) (= (* z 2))) (g (t u) (= (+ t u))) ) ( (calculate (+ (f x y) (h s) (g a))) )))
